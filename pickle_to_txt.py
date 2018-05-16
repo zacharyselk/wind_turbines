@@ -81,16 +81,26 @@ def to_txt(pickle_files, txt_file_name):
 def read_stations(file_name):
     lst = []
     with open(file_name, 'r') as f:
-        string = f.read()
-        
+        string = f.read()        
         lst = string.split(STATION_DELIM)
-            
-    return lst
+     
+    # Get rid of empty stations
+    keep = []
+    for element in lst:
+        if not element:
+            continue
+        keep.append(element)
+        
+    return keep
 
 # Returns an attribute of a station when given a string from ATTRS (ie. 'name', 'prov'...)
 def get_station_attr(station, attr):
     index = ATTRS[attr]
-    return station.split(ATTR_DELIM)[index]
+    try:
+        return station.split(ATTR_DELIM)[index]
+    except IndexError:
+        print(station)
+        return None
 
 # Default if run not as a library
 if __name__ == '__main__':
